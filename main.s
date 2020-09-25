@@ -91,10 +91,7 @@ InitPortF
 	LDR R1, =GPIO_PORTF_DEN_R
 	STR R0, [R1]
 main
-	; Start by turning off the LED (might not actually be needed)
-	MOV R0, #0x00
-	LDR R1, =GPIO_PORTF_DATA_R
-	STR R0, [R1]
+	; No initialization necessary
 loop
 	MOV R12, #0x270F ; set R12 to our big number to get us our 100 ms delay
 	MOVT R12, #0x6
