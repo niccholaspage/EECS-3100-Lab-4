@@ -104,7 +104,7 @@ loop
 	MOV R0, #0x00
 	LDR R1, =GPIO_PORTF_DATA_R
 	STR R0, [R1]
-	B end_loop
+	B loop
 toggle_led ; Toggles the LED
 	; Read Port F data so we can check if LED is on or not
 	LDR R1, =GPIO_PORTF_DATA_R
@@ -121,7 +121,6 @@ turn_on_led
 	MOV R0, #0x08
 	LDR R1, =GPIO_PORTF_DATA_R
 	STR R0, [R1]
-end_loop
 	; Loop again!
 	B    loop
 
