@@ -93,7 +93,6 @@ InitPortF
 main
 	; No initialization necessary
 loop
-	BL Delay100ms
 	; Read switch and test if switch is pressed
 	; If switch is pressed (PF4 == 0) toggle PF3 else clear PF3 so LED is off
 	LDR R1, =GPIO_PORTF_DATA_R ; Load the address of Port F data into R1
