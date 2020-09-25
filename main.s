@@ -93,9 +93,7 @@ InitPortF
 main
 	; No initialization necessary
 loop
-	MOV R12, #0x270F ; set R12 to our big number to get us our 100 ms delay
-	MOVT R12, #0x6
-	BL WaitForDelay
+	BL Delay100ms
 	; Read switch and test if switch is pressed
 	; If switch is pressed (PF4 == 0) toggle PF3 else clear PF3 so LED is off
 	LDR R1, =GPIO_PORTF_DATA_R ; Load the address of Port F data into R1
@@ -127,7 +125,10 @@ end_loop
 	; Loop again!
 	B    loop
 
-; To call this subroutine, say BL WaitForDelay
+; A subroutine that delays for 100 ms then returns to the original line
+Delay100ms
+	MOV R12, #0x270F ; set R12 to our big number to get us our 100 ms delay
+	MOVT R12, #0x6
 WaitForDelay
 	SUBS R12, R12, #0x01
 	BNE WaitForDelay
