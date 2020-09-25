@@ -115,14 +115,15 @@ toggle_led ; Toggles the LED
 	MOV R0, #0x00
 	LDR R1, =GPIO_PORTF_DATA_R
 	STR R0, [R1]
-	B loop
+	BL Delay100ms ; Delay 100 ms
+	B loop ; Loop again
 turn_on_led
 	; Turns on the LED
 	MOV R0, #0x08
 	LDR R1, =GPIO_PORTF_DATA_R
 	STR R0, [R1]
-	; Loop again!
-	B    loop
+	BL Delay100ms ; Delay 100 ms
+	B    loop ; Loop again
 
 ; A subroutine that delays for 100 ms then returns to the original line
 Delay100ms
