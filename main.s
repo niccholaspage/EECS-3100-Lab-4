@@ -126,8 +126,8 @@ turn_on_led
 
 ; A subroutine that delays for 100 ms then returns to the original line
 Delay100ms
-	MOV R12, #0x270F ; set R12 to our big number to get us our 100 ms delay
-	MOVT R12, #0x6
+	MOV R12, #0x0000 ; set R12 to our big number to get us our 100 ms delay
+	MOVT R12, #0x7
 WaitForDelay
 	SUBS R12, R12, #0x01
 	BNE WaitForDelay
