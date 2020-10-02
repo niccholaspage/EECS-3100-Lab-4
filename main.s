@@ -15,7 +15,7 @@
 ;   PF3 is LED output    (1 activates green LED) 
 ; The specific operation of this system 
 ;   1) Make PF3 an output and make PF4 an input (enable PUR for PF4). 
-;   2) The system starts with the LED OFF (make PF3 =0). 
+;   2) The system starts with the LED OFF (make PF3=0). 
 ;   3) Delay for about 100 ms
 ;   4) If the switch is pressed (PF4 is 0),
 ;      then toggle the LED once, else turn the LED OFF. 
@@ -91,7 +91,10 @@ InitPortF
 	LDR R1, =GPIO_PORTF_DEN_R
 	STR R0, [R1]
 main
-	; No initialization necessary
+	; No initialization necessary, we just get right into the loop,
+	; since we've already performed the initialization above.
+	; Technically, this could be removed and we could just start at
+	; the loop, I just kept it here to keep it similar to a C program.
 loop
 	; Read switch and test if switch is pressed
 	; If switch is pressed (PF4 == 0) toggle PF3 else clear PF3 so LED is off
@@ -100,6 +103,7 @@ loop
 	LSR R0, #4 ; Shift the register 4 bits to the right, since we only care about pin 4
 	CBZ R0, toggle_led
 	; Turn off the LED, since the switch is not pressed
+	; GPIO_PORTF_DATA_R = 0x00
 	MOV R0, #0x00
 	LDR R1, =GPIO_PORTF_DATA_R
 	STR R0, [R1]
@@ -111,6 +115,7 @@ toggle_led ; Toggles the LED
 	LSR R0, #3 ; Shift the register 3 bits to the right, since we only care about pin 3
 	CBZ R0, turn_on_led ; If the LED is off, then we turn it on
 	; Turn off the LED
+	; GPIO_PORTF_DATA_R = 0x00
 	MOV R0, #0x00
 	LDR R1, =GPIO_PORTF_DATA_R
 	STR R0, [R1]
@@ -118,6 +123,7 @@ toggle_led ; Toggles the LED
 	B loop ; Loop again
 turn_on_led
 	; Turns on the LED
+	; GPIO_PORTF_DATA_R = 0x08
 	MOV R0, #0x08
 	LDR R1, =GPIO_PORTF_DATA_R
 	STR R0, [R1]
@@ -127,11 +133,11 @@ turn_on_led
 ; A subroutine that delays for 100 ms then returns to the original line
 Delay100ms
 	MOV R12, #0x0000 ; set R12 to our big number to get us our 100 ms delay
-	MOVT R12, #0x7
+	MOVT R12, #0x7 ; Needed so we can fill the upper halfword of the register too
 WaitForDelay
-	SUBS R12, R12, #0x01
-	BNE WaitForDelay
-	BX LR
+	SUBS R12, R12, #0x01 ; Subtract one from the register
+	BNE WaitForDelay ; If the value isn't zero, go back to waiting for the delay
+	BX LR ; We did it, we finished waiting! So we go back to where we were before calling this.
 
 
 	ALIGN      ; make sure the end of this section is aligned
